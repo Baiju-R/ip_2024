@@ -1,0 +1,34 @@
+Create a JSP Page that Tracks How Many Times the User Has 
+Visited the Page in a Single
+
+visitCounter.jsp: 
+ 
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+pageEncoding="UTF8"%> 
+<%@ page session="true" %> 
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Visit Counter</title> 
+</head> 
+<body> 
+    <h1>Session Visit Counter</h1> 
+<% 
+        // Retrieve the session object 
+        Integer visitCount = (Integer) session.getAttribute("visitCount"); 
+ 
+        // If this is the first visit, initialize the counter 
+        if (visitCount == null) { 
+            visitCount = 1; 
+        } else { 
+            visitCount++; 
+        } 
+ 
+        // Store the updated visit count in the session 
+        session.setAttribute("visitCount", visitCount); 
+    %> 
+    <p>You have visited this page <strong><%= visitCount %></strong> times 
+during this session.</p> 
+    <p>Refresh the page to increment the counter.</p> 
+</body> 
+</html>

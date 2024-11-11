@@ -1,0 +1,54 @@
+Web Page with Cascading, Embedded, and Inline Style Sheets
+
+index.html: 
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>CSS Styles Demonstration</title> 
+ 
+    <!-- External CSS --> 
+    <link rel="stylesheet" href="styles.css"> 
+ 
+    <!-- Embedded / Internal CSS --> 
+ <style> 
+        h1 { 
+            color: blue; 
+            text-align: center; 
+        } 
+ 
+        .embedded-style { 
+            font-family: Arial, sans-serif;
+  font-size: 18px; 
+            margin: 10px; 
+        } 
+    </style> 
+</head> 
+<body> 
+ 
+    <h1>CSS Styles Demonstration</h1> 
+ 
+    <p class="embedded-style">This paragraph is styled using embedded CSS. The styles are 
+defined in the <code>&lt;style&gt;</code> tag within the HTML document's head 
+section.</p> 
+ 
+    <p style="color: red; font-weight: bold;">This paragraph is styled using inline CSS. The 
+styles are directly applied to the element using the <strong>style</strong> attribute.</p> 
+ 
+    <div class="external-style"> 
+        This div is styled using external CSS. The styles are defined in a separate CSS file 
+linked to the HTML document. 
+    </div> 
+ 
+</body> 
+</html> 
+    
+styles.css: 
+/* External CSS */ 
+.external-style { 
+    font-family: 'Times New Roman', Times, serif; 
+    font-size: 20px; 
+    color: green; 
+    margin: 15px; 
+}  

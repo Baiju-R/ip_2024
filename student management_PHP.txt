@@ -1,0 +1,172 @@
+Develop student database management system using PHP
+
+DROP TABLE IF EXISTS data;
+
+Sql: 
+CREATE TABLE data ( 
+    id INT(11) AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(50) NOT NULL, 
+    age INT(3) NOT NULL, 
+    email VARCHAR(100) NOT NULL, 
+    course VARCHAR(50) NOT NULL 
+); 
+ 
+PHP Code: 
+
+<?php
+
+$servername = "localhost"; // Usually 'localhost'
+$username = "root"; // MySQL username
+$password = ""; // MySQL password
+$dbname = "mark"; // Database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Track visits
+$visit_count_file = 'visit_count.txt';
+
+// Check if the visit count file exists, if not create it
+if (!file_exists($visit_count_file)) {
+    file_put_contents($visit_count_file, 0);
+}
+
+// Increment visit count
+$visit_count = file_get_contents($visit_count_file);
+$visit_count++;
+file_put_contents($visit_count_file, $visit_count);
+
+// Insert Student Record
+if (isset($_POST['insert'])) {
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+    $course = $_POST['course'];
+
+    $sql = "INSERT INTO data (name, age, email, course) VALUES ('$name', '$age', '$email', '$course')";
+    if ($conn->query($sql) === TRUE) {
+        echo "New student record inserted successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Update Student Record
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+    $course = $_POST['course'];
+
+    $sql = "UPDATE data SET name='$name', age='$age', email='$email', course='$course' WHERE id=$id";
+    if ($conn->query($sql) === TRUE) {
+        echo "Student record updated successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Delete Student Record
+if (isset($_POST['delete'])) {
+    $id = $_POST['id'];
+    $sql = "DELETE FROM data WHERE id=$id";
+    if ($conn->query($sql) === TRUE) {
+        echo "Student record deleted successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Retrieve Students
+$sql = "SELECT id, name, age, email, course FROM data";
+$result = $conn->query($sql);
+
+?>
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Student Details Entry</title> 
+    <link rel="stylesheet" href="style.css"> 
+</head> 
+<body> 
+
+<h2>Student Details Entry Form</h2> 
+
+<!-- Form to Insert Student -->
+<form method="POST" action=""> 
+    <h3>Insert Student</h3> 
+    Name: <input type="text" name="name" required><br> 
+    Age: <input type="number" name="age" required><br> 
+    Email: <input type="email" name="email" required><br> 
+    Course: <input type="text" name="course" required><br> 
+    <input type="submit" name="insert" value="Insert"> 
+</form> 
+
+<!-- Form to Update Student -->
+<form method="POST" action=""> 
+    <h3>Update Student</h3> 
+    ID: <input type="number" name="id" required><br> 
+    Name: <input type="text" name="name" required><br> 
+    Age: <input type="number" name="age" required><br> 
+    Email: <input type="email" name="email" required><br> 
+    Course: <input type="text" name="course" required><br> 
+    <input type="submit" name="update" value="Update"> 
+</form> 
+
+<!-- Form to Delete Student -->
+<form method="POST" action=""> 
+    <h3>Delete Student</h3> 
+    ID: <input type="number" name="id" required><br> 
+    <input type="submit" name="delete" value="Delete"> 
+</form> 
+
+<!-- Displaying Student Records -->
+<h3>Student Records</h3> 
+<table border="1"> 
+    <tr> 
+        <th>ID</th> 
+        <th>Name</th> 
+        <th>Age</th>
+        <th>Email</th> 
+        <th>Course</th> 
+    </tr> 
+
+    <?php 
+    if ($result === false) { 
+        echo "<tr><td colspan='5'>Error: " . $conn->error . "</td></tr>"; 
+    } else { 
+        if ($result->num_rows > 0) { 
+            while ($row = $result->fetch_assoc()) { 
+                echo "<tr> 
+                        <td>" . $row["id"] . "</td> 
+                        <td>" . $row["name"] . "</td> 
+                        <td>" . $row["age"] . "</td> 
+                        <td>" . $row["email"] . "</td> 
+                        <td>" . $row["course"] . "</td> 
+                      </tr>"; 
+            } 
+        } else { 
+            echo "<tr><td colspan='5'>No records found</td></tr>"; 
+        } 
+    } 
+    ?> 
+</table> 
+
+<!-- Display visit count -->
+<h4>This page has been visited <?php echo $visit_count; ?> times.</h4> 
+
+</body> 
+</html> 
+
+<?php 
+$conn->close(); 
+?>

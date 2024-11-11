@@ -1,0 +1,62 @@
+Write a Servlet that Tracks How Many Times the Page Has Been 
+Visited
+
+index.html: 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visit Counter</title>
+</head>
+<body>
+    <h1>Welcome to the Visit Counter</h1>
+    <form action="VisitCounterServlet" method="get">
+        <input type="submit" value="Visit Page">
+    </form>
+</body>
+</html>
+
+
+VisitCounterServlet.java:
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
+
+@WebServlet("/VisitCounterServlet")
+public class VisitCounterServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Get the session object
+        HttpSession session = request.getSession();
+        
+        // Retrieve the visit count from the session
+        Integer visitCount = (Integer) session.getAttribute("visitCount");
+        
+        // If visitCount is null, this is the first visit
+        if (visitCount == null) {
+            visitCount = 1; // First visit
+        } else {
+            visitCount++; // Increment visit count
+        }
+        
+        // Store the updated visit count back in the session
+        session.setAttribute("visitCount", visitCount);
+        
+        // Set the content type
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        // Generate response
+        out.println("<html><body>");
+        out.println("<h1>You have visited this page " + visitCount + " time(s) during this session.</h1>");
+        out.println("<a href='index.html'>Go Back</a>");
+        out.println("</body></html>");
+    }
+}

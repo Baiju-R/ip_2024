@@ -1,0 +1,52 @@
+Write a Servlet that Takes Input from the User and Displays a 
+Personalized Welcome Message 
+
+index.jsp: 
+ 
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+pageEncoding="UTF8"%> 
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Enter Your Name</title> 
+</head> 
+<body> 
+    <h1>Please Enter Your Name</h1> 
+    <form action="WelcomeServlet" method="POST"> 
+        <label for="name">Name:</label> 
+        <input type="text" id="name" name="name" required><br><br> 
+        <input type="submit" value="Submit"> 
+    </form>
+</body> 
+</html> 
+ 
+WelcomeServlet.java: 
+ 
+import java.io.IOException; 
+import javax.servlet.ServletException; 
+import javax.servlet.annotation.WebServlet; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+import java.io.PrintWriter; 
+ 
+@WebServlet("/WelcomeServlet") 
+public class WelcomeServlet extends HttpServlet { 
+    private static final long serialVersionUID = 1L; 
+ 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException { 
+        // Set response content type 
+        response.setContentType("text/html"); 
+ 
+        // Get the name parameter from the request 
+        String name = request.getParameter("name"); 
+ 
+        // Prepare response output 
+        PrintWriter out = response.getWriter(); 
+        out.println("<html><body>"); 
+        out.println("<h1>Welcome, " + name + "!</h1>"); 
+        out.println("<p>Thank you for submitting your name.</p>"); 
+        out.println("</body></html>"); 
+    } 
+} 

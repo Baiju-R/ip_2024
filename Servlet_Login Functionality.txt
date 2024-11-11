@@ -1,0 +1,65 @@
+Create a Servlet that Handles User Login Functionality
+
+index.jsp: 
+ 
+login.html: 
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>User Login</title> 
+</head> 
+<body> 
+    <h1>Login</h1> 
+    <form action="LoginServlet" method="post"> 
+        <label for="username">Username:</label> 
+        <input type="text" id="username" name="username" required> 
+        <br>
+  <label for="password">Password:</label> 
+        <input type="password" id="password" name="password" required> 
+        <br> 
+        <input type="submit" value="Login"> 
+    </form> 
+</body> 
+</html> 
+ 
+LoginServlet.java: 
+ 
+import java.io.IOException; 
+import javax.servlet.ServletException; 
+import javax.servlet.annotation.WebServlet; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+import java.io.PrintWriter; 
+ 
+@WebServlet("/LoginServlet") 
+public class LoginServlet extends HttpServlet { 
+    // Example hardcoded credentials (in practice, use a database) 
+    private static final String USERNAME = "user"; 
+    private static final String PASSWORD = "password"; 
+ 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException { 
+        // Retrieve credentials from the form 
+        String username = request.getParameter("username"); 
+        String password = request.getParameter("password"); 
+ 
+        // Set the content type 
+        response.setContentType("text/html"); 
+        PrintWriter out = response.getWriter(); 
+ 
+        // Validate credentials 
+        if (USERNAME.equals(username) && PASSWORD.equals(password)) { 
+            // Successful login 
+            out.println("<html><body>"); 
+            out.println("<h1>Welcome, " + username + "!</h1>"); 
+            out.println("</body></html>"); 
+        } else { 
+            // Failed login 
+            out.println("<html><body>"); 
+            out.println("<h1>Invalid username or password.</h1>");
+  out.println("<a href='login.html'>Try again</a>"); 
+            out.println("</body></html>"); 
+        } 
+    } 
+}
